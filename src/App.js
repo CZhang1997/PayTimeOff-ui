@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+import LoginContext from "./contexts/login-context";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import EmployeeSignUp from "./componets/employee-signup";
+// import "bootstrap/dist/css/bootstrap.css";
 
-function App() {
+function App({ user, signOut }) {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container">
+        <LoginContext.Provider value={{ user, signOut }}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<EmployeeSignUp />} />
+            </Routes>
+          </BrowserRouter>
+        </LoginContext.Provider>
+      </div>
     </div>
   );
 }
 
-export default App;
+export default withAuthenticator(App, {
+  hideSignUp: true,
+});
